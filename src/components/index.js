@@ -1,2 +1,6 @@
 export { default as Education } from "./education/Education";
-export { default as Home } from "./education/Home";
+
+// Auth
+export { default as AuthBanner } from "./auth/AuthBanner";
+export { default as LoginForm } from "./auth/LoginForm";
+export { default as SignUpForm } from "./auth/SignUpForm";

@@ -1,17 +1,16 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ProtectedLayout from "./layouts/ProtectedLayout";
-import { HomePage, ContactPage, RegisterPage } from "@pages";
-import LoginPage from "./pages/auth/LoginPage";
+import { HomePage, ContactPage, LoginPage, SignUpPage } from "@pages";
 
 const routes = [
   {
-    path: "/login",
+    path: "/",
     element: <LoginPage />,
   },
   {
-    path: "/register",
-    element: <RegisterPage />,
+    path: "/sign-up",
+    element: <SignUpPage />,
   },
 ];
 
@@ -25,7 +24,7 @@ const protectedRoutes = [
 const App = () => {
   return (
     <Router>
-      <div className="min-h-screen bg-surface-background">
+      <div className="min-h-screen bg-[#F4F5F9]">
         <Routes>
           {routes.map(({ path, element }) => (
             <Route key={path} element={element} path={path} />
