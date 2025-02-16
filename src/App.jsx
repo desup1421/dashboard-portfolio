@@ -2,10 +2,15 @@ import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ProtectedLayout from "./layouts/ProtectedLayout";
 import { HomePage, ContactPage, RegisterPage } from "@pages";
+import LoginPage from "./pages/auth/LoginPage";
 
 const routes = [
   {
-    path: "/",
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/register",
     element: <RegisterPage />,
   },
 ];
