@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ProtectedLayout from "./layouts/ProtectedLayout";
-import { HomePage, ContactPage, RegisterPage } from "@pages";
+import { ContactPage, HomePage, ProjectPage, RegisterPage } from "@pages";
 
 const routes = [
   {
@@ -12,10 +12,14 @@ const routes = [
 
 const protectedRoutes = [
   {
-    path: "project",
+    path: "contact",
     element: <ContactPage />,
-  }
-]
+  },
+  {
+    path: "project",
+    element: <ProjectPage />,
+  },
+];
 
 const App = () => {
   return (
@@ -39,4 +43,4 @@ const App = () => {
   );
 };
 
-export default App; 
+export default App;
