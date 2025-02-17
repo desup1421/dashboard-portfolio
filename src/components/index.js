@@ -4,3 +4,6 @@ export { default as Education } from "./education/Education";
 export { default as AuthBanner } from "./auth/AuthBanner";
 export { default as LoginForm } from "./auth/LoginForm";
 export { default as SignUpForm } from "./auth/SignUpForm";
+
+// Commons
+export { default as Sidebar } from "./commons/Sidebar";

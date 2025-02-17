@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ProtectedLayout from "./layouts/ProtectedLayout";
-import { HomePage, ContactPage, LoginPage, SignUpPage } from "@pages";
+import { HomePage, LoginPage, SignUpPage, HeroPage, EducationPage, ProjectPage, SkillPage, ContactPage } from "@pages";
 
 const routes = [
   {
@@ -16,9 +16,25 @@ const routes = [
 
 const protectedRoutes = [
   {
+    path: "hero",
+    element: <HeroPage />,
+  },
+  {
+    path: "education",
+    element: <EducationPage />,
+  },
+  {
     path: "project",
+    element: <ProjectPage />,
+  },
+  {
+    path: "skill",
+    element: <SkillPage />,
+  },
+  {
+    path: "contact",
     element: <ContactPage />,
-  }
+  },
 ]
 
 const App = () => {
