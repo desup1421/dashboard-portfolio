@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { Card, Table } from "@components";
@@ -40,8 +40,68 @@ const ProjectPage = () => {
         "https://res.cloudinary.com/dm9yt0fkb/image/upload/v1739375362/projects/67acc2faf537315fe144494a-0.jpg",
       published: true,
     },
+    {
+      id: 1,
+      title: "Project 1",
+      description: "Project description 1",
+      tags: ["php", "javascript"],
+      slug: "test-projects",
+      thumb:
+        "https://res.cloudinary.com/dm9yt0fkb/image/upload/v1739375362/projects/67acc2faf537315fe144494a-0.jpg",
+      published: true,
+    },
+    {
+      id: 2,
+      title: "Project 2",
+      description: "Project description 2",
+      tags: ["php", "javascript"],
+      slug: "test-projects",
+      thumb:
+        "https://res.cloudinary.com/dm9yt0fkb/image/upload/v1739375362/projects/67acc2faf537315fe144494a-0.jpg",
+      published: true,
+    },
+    {
+      id: 3,
+      title: "Project 3",
+      description: "Project description 3",
+      tags: ["php", "javascript"],
+      slug: "test-projects",
+      thumb:
+        "https://res.cloudinary.com/dm9yt0fkb/image/upload/v1739375362/projects/67acc2faf537315fe144494a-0.jpg",
+      published: true,
+    },
+    {
+      id: 1,
+      title: "Project 1",
+      description: "Project description 1",
+      tags: ["php", "javascript"],
+      slug: "test-projects",
+      thumb:
+        "https://res.cloudinary.com/dm9yt0fkb/image/upload/v1739375362/projects/67acc2faf537315fe144494a-0.jpg",
+      published: true,
+    },
+    {
+      id: 2,
+      title: "Project 2",
+      description: "Project description 2",
+      tags: ["php", "javascript"],
+      slug: "test-projects",
+      thumb:
+        "https://res.cloudinary.com/dm9yt0fkb/image/upload/v1739375362/projects/67acc2faf537315fe144494a-0.jpg",
+      published: true,
+    },
+    {
+      id: 3,
+      title: "Project 3",
+      description: "Project description 3",
+      tags: ["php", "javascript"],
+      slug: "test-projects",
+      thumb:
+        "https://res.cloudinary.com/dm9yt0fkb/image/upload/v1739375362/projects/67acc2faf537315fe144494a-0.jpg",
+      published: true,
+    },
   ];
-  const [tableData, setTableData] = useState(dummyData);
+  const [tableData, setTableData] = useState([]);
 
   // TABLE ACTIONS
   const actions = [
@@ -69,10 +129,23 @@ const ProjectPage = () => {
   // PAGINATION
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const totalPages = Math.ceil(tableData.length / rowsPerPage);
+  const totalPages = Math.ceil(dummyData.length / rowsPerPage);
   const handleRowChange = (event) => {
     setRowsPerPage(Number(event.target.value));
   };
+
+  const currentData = dummyData.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage
+  )
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+    setTableData(currentData);
+  }, [rowsPerPage, currentPage]);
+
+  console.log(totalPages);
 
   return (
     <main className="bg-surface-background p-10">
@@ -118,8 +191,8 @@ const ProjectPage = () => {
           <p className="text-sm text-type-text-light font-medium">
             {`${(currentPage - 1) * rowsPerPage + 1}-${Math.min(
               currentPage * rowsPerPage,
-              tableData.length
-            )} of ${tableData.length}`}
+              dummyData.length
+            )} of ${dummyData.length}`}
           </p>
           <div className="flex justify-between items-center">
             <div>
