@@ -1,47 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 import { Card, Table } from "@components";
 import { Pencil, Trash } from "@icons";
 
+import { useGetProjectsQuery } from "../../store/slices/projectSlice";
+
 const ProjectPage = () => {
   const navigate = useNavigate();
+  // RTK QUERY
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(4);
+  const { data: projects, isLoading } = useGetProjectsQuery({
+    limit: rowsPerPage,
+    page: currentPage,
+  });
+
+  if (!isLoading) {
+    console.log(projects);
+  }
   // PROPS TABLE HEADER & DATA
   const tableHeader = ["Name", "Description", "Tags", "Published", "Action"];
   const dataKey = ["title", "description", "tags", "published"];
-  const dummyData = [
-    {
-      id: 1,
-      title: "Project 1",
-      description: "Project description 1",
-      tags: ["php", "javascript"],
-      slug: "test-projects",
-      thumb:
-        "https://res.cloudinary.com/dm9yt0fkb/image/upload/v1739375362/projects/67acc2faf537315fe144494a-0.jpg",
-      published: true,
-    },
-    {
-      id: 2,
-      title: "Project 2",
-      description: "Project description 2",
-      tags: ["php", "javascript"],
-      slug: "test-projects",
-      thumb:
-        "https://res.cloudinary.com/dm9yt0fkb/image/upload/v1739375362/projects/67acc2faf537315fe144494a-0.jpg",
-      published: true,
-    },
-    {
-      id: 3,
-      title: "Project 3",
-      description: "Project description 3",
-      tags: ["php", "javascript"],
-      slug: "test-projects",
-      thumb:
-        "https://res.cloudinary.com/dm9yt0fkb/image/upload/v1739375362/projects/67acc2faf537315fe144494a-0.jpg",
-      published: true,
-    },
-  ];
-  const [tableData, setTableData] = useState(dummyData);
+  const [tableData, setTableData] = useState([]);
 
   // TABLE ACTIONS
   const actions = [
@@ -65,14 +46,23 @@ const ProjectPage = () => {
     setTableData(newData);
   };
 
-
   // PAGINATION
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const totalPages = Math.ceil(tableData.length / rowsPerPage);
+  const totalProjects = projects?.data?.total || 1;
+  const totalPages = projects?.data?.totalPages || 1;
   const handleRowChange = (event) => {
     setRowsPerPage(Number(event.target.value));
   };
+
+  // Update project data display
+  useEffect(() => {
+    if (projects) {
+      setTableData(projects.data.projects);
+    }
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [projects, currentPage, totalPages]);
+
 
   return (
     <main className="bg-surface-background p-10">
@@ -115,11 +105,13 @@ const ProjectPage = () => {
 
         {/* PAGINATION */}
         <div className="flex flex-col items-center md:flex-row md:justify-between text-black/50 font-bold mt-5 text-sm px-5">
+          {/* Text: 1 - 10 of 20 */}
           <p className="text-sm text-type-text-light font-medium">
-            {`${(currentPage - 1) * rowsPerPage + 1}-${Math.min(
-              currentPage * rowsPerPage,
-              tableData.length
-            )} of ${tableData.length}`}
+            {`${totalPages > 0 ? (currentPage - 1) * rowsPerPage + 1 : 0}-${
+              currentPage * rowsPerPage < totalProjects
+                ? currentPage * rowsPerPage
+                : totalProjects
+            } of ${totalProjects}`}
           </p>
           <div className="flex justify-between items-center">
             <div>
