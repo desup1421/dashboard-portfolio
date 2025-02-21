@@ -1,7 +1,10 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ProtectedLayout from "./layouts/ProtectedLayout";
-import { HomePage, ContactPage, RegisterPage } from "@pages";
+import { ContactPage, HomePage, ProjectPage, RegisterPage } from "@pages";
+import EducationPage from "./pages/education/EducationPage";
+import AddEducation from "./components/education/EducationForm";
+import EducationFormPage from "./pages/education/EducationFormPage";
 
 const routes = [
   {
@@ -12,10 +15,26 @@ const routes = [
 
 const protectedRoutes = [
   {
-    path: "project",
+    path: "contact",
     element: <ContactPage />,
-  }
-]
+  },
+  {
+    path: "project",
+    element: <ProjectPage />,
+  },
+  {
+    path: "education",
+    element: <EducationPage />,
+  },
+  {
+    path: "education/add",
+    element: <EducationFormPage />,
+  },
+  {
+    path: "education/edit/:id",
+    element: <EducationFormPage />,
+  },
+];
 
 const App = () => {
   return (
@@ -39,4 +58,4 @@ const App = () => {
   );
 };
 
-export default App; 
+export default App;
