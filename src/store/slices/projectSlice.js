@@ -9,7 +9,8 @@ export const projectApi = createApi({
   }),
   endpoints: (builder) => ({
     getProjects: builder.query({
-      query: ({limit, page}) => `project?limit=${limit}&page=${page}`,
+      query: ({ limit, page }) => `project?limit=${limit}&page=${page}`,
+      providesTags: ["Projects"],
     }),
     createProject: builder.mutation({
       query: (data) => ({
@@ -17,6 +18,7 @@ export const projectApi = createApi({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["Projects"],
     }),
     updateProject: builder.mutation({
       query: (data) => ({
@@ -24,12 +26,21 @@ export const projectApi = createApi({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["Projects"],
     }),
     deleteProject: builder.mutation({
       query: (id) => ({
         url: `project/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Projects"],
+    }),
+    publishProject: builder.mutation({
+      query: (id) => ({
+        url: `project/publish/${id}`,
+        method: "PUT",
+      }),
+      invalidatesTags: ["Projects"],
     }),
   }),
 });
@@ -39,4 +50,5 @@ export const {
   useCreateProjectMutation,
   useUpdateProjectMutation,
   useDeleteProjectMutation,
+  usePublishProjectMutation,
 } = projectApi;
