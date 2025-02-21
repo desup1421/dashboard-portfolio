@@ -4,6 +4,7 @@ import ProtectedLayout from "./layouts/ProtectedLayout";
 import { ContactPage, HomePage, ProjectPage, RegisterPage } from "@pages";
 import EducationPage from "./pages/education/EducationPage";
 import AddEducation from "./components/education/EducationForm";
+import EducationFormPage from "./pages/education/EducationFormPage";
 
 const routes = [
   {
@@ -27,11 +28,11 @@ const protectedRoutes = [
   },
   {
     path: "education/add",
-    element: <EducationPage />,
+    element: <EducationFormPage />,
   },
   {
-    path: "education/edit",
-    element: <EducationPage />,
+    path: "education/edit/:id",
+    element: <EducationFormPage />,
   },
 ];
 
