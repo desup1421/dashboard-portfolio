@@ -12,6 +12,10 @@ export const projectApi = createApi({
       query: ({ limit, page }) => `project?limit=${limit}&page=${page}`,
       providesTags: ["Projects"],
     }),
+    getProjectDetail: builder.query({
+      query: (id) => `project/${id}`,
+      providesTags: ["Projects"],
+    }),
     createProject: builder.mutation({
       query: (data) => ({
         url: "project",
@@ -47,6 +51,7 @@ export const projectApi = createApi({
 
 export const {
   useGetProjectsQuery,
+  useGetProjectDetailQuery,
   useCreateProjectMutation,
   useUpdateProjectMutation,
   useDeleteProjectMutation,
