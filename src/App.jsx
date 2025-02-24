@@ -1,7 +1,11 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ProtectedLayout from "./layouts/ProtectedLayout";
-import { ContactPage, HomePage, ProjectPage, RegisterPage } from "@pages";
+import { ContactPage, HomePage, ProjectPage, RegisterPage, SkillPage} from "@pages";
+import EducationPage from "./pages/education/EducationPage";
+import AddEducation from "./components/education/EducationForm";
+import EducationFormPage from "./pages/education/EducationFormPage";
+import SkillFormPage from "./pages/skill/SkillFormPage";
 
 const routes = [
   {
@@ -19,6 +23,30 @@ const protectedRoutes = [
     path: "project",
     element: <ProjectPage />,
   },
+  {
+    path: "education",
+    element: <EducationPage />,
+  },
+  {
+    path: "education/add",
+    element: <EducationFormPage />,
+  },
+  {
+    path: "education/edit/:id",
+    element: <EducationFormPage />,
+  },
+  {
+    path : "skill",
+    element : <SkillPage />
+  },
+  {
+    path : "skill/add",
+    element : <SkillFormPage />
+  },
+  {
+    path : "skill/edit/id",
+    element : <SkillFormPage />
+  }
 ];
 
 const App = () => {
