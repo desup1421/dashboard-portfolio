@@ -8,7 +8,7 @@ import {
   ModalSuccess,
   ModalLoading,
 } from "@components";
-import { Pencil, Trash } from "@icons";
+import { ArrowRightSmall, Eyes, Pencil, Trash } from "@icons";
 
 // SWEETALERT
 import Swal from "sweetalert2";
@@ -88,7 +88,19 @@ const ProjectPage = () => {
 
   // DELETE HANDLING
   const handleDelete = async (id) => {
+    // Call modal loading and auto close confirm modal
+    MySwal.fire({
+      html: <ModalLoading />,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      customClass: {
+        popup:
+          "rounded-3xl w-auto md:w-[720px] h-[200px] flex justify-center items-center",
+      },
+    });
+    // Make a request and wait response
     await deleteProject(id);
+    // Call modal success after receive response and auto close loading modal
     MySwal.fire({
       html: <ModalSuccess message="This project was successfully deleted" />,
       customClass: {
@@ -119,8 +131,12 @@ const ProjectPage = () => {
   // TABLE ACTIONS
   const actions = [
     {
+      icon: Eyes,
+      action: (data) => navigate(`/dashboard/project/detail/${data.id}`),
+    },
+    {
       icon: Pencil,
-      action: (data) => console.log(data),
+      action: (data) => navigate(`/dashboard/project/edit/${data.id}`),
     },
     {
       icon: Trash,
@@ -160,13 +176,13 @@ const ProjectPage = () => {
               >
                 Home
               </span>
-              {/* <ArrowRightSmall /> */}
+              <ArrowRightSmall />
               <span className="text-primary text-xs">Projects</span>
             </p>
           </header>
           <button
-            className="flex justify-center items-center text-[12.64px] rounded-md text-white px-2 bg-primary hover:bg-primary-dark transition-colors w-[128px] h-[32px]"
-            // onClick={handleOpenAddCategory}
+            className="flex justify-center items-center text-[12.64px] rounded-md text-white px-2 bg-primary hover:bg-primary-dark transition-colors w-[128px] h-[32px] cursor-pointer"
+            onClick={() => navigate("/dashboard/project/add")}
           >
             Add New Project
           </button>

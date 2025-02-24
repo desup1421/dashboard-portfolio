@@ -2,6 +2,7 @@ import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ProtectedLayout from "./layouts/ProtectedLayout";
 import { ContactPage, HomePage, ProjectPage, RegisterPage, SkillPage} from "@pages";
+import { ProjectForm } from "./pages";
 import EducationPage from "./pages/education/EducationPage";
 import AddEducation from "./components/education/EducationForm";
 import EducationFormPage from "./pages/education/EducationFormPage";
@@ -22,6 +23,18 @@ const protectedRoutes = [
   {
     path: "project",
     element: <ProjectPage />,
+  },
+  {
+    path: "project/detail/:id",
+    element: <ProjectForm />,
+  },
+  {
+    path: "project/add",
+    element: <ProjectForm />,
+  },
+  {
+    path: "project/edit/:id",
+    element: <ProjectForm />,
   },
   {
     path: "education",
