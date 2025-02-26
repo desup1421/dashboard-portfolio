@@ -6,9 +6,10 @@ import { ArrowLeft, ArrowRightSmall } from "@icons";
 import {
   useGetProjectDetailQuery,
   useCreateProjectMutation,
+  useUpdateProjectMutation,
 } from "../../store/slices/projectSlice";
 
-import { ModalSuccess } from "@components";
+import { ModalSuccess, ModalLoading } from "@components";
 
 // SWEETALERT
 import Swal from "sweetalert2";
@@ -24,12 +25,14 @@ const ProjectForm = () => {
 
   const { data, isLoading } = useGetProjectDetailQuery(id, { skip: !id });
   const [createProject] = useCreateProjectMutation();
+  const [updateProject] = useUpdateProjectMutation();
 
   const [formObject, setFormObject] = useState(
     data?.data || {
       title: "",
       link: "",
       images: [],
+      cover: "",
       description: "",
       slug: "",
       technologies: [],
@@ -48,13 +51,30 @@ const ProjectForm = () => {
       if (Array.isArray(formObject[key]) && key === "images") {
         // Untuk properti yang berupa array, append setiap elemen secara terpisah
         formObject[key].forEach((item) => {
-          formData.append(key, item);
+          if(item.file) {
+            formData.append(key, item.file);
+          } else {
+            formData.append(key, JSON.stringify(item));
+          }
         });
       } else {
         formData.append(key, formObject[key]);
       }
     }
-    await createProject(formData);
+    MySwal.fire({
+      html: <ModalLoading />,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      customClass: {
+        popup:
+          "rounded-3xl w-auto md:w-[720px] h-[200px] flex justify-center items-center",
+      },
+    });
+    if (id) {
+      await updateProject(formData);
+    } else {
+      await createProject(formData);
+    }
     MySwal.fire({
       html: (
         <ModalSuccess message="This project was successfully unpublished" />
@@ -66,12 +86,18 @@ const ProjectForm = () => {
       timer: 1000,
     });
     navigate("/dashboard/project");
-    console.log(formObject);
-    console.log(formData);
+    // console.log(formObject);
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
   };
 
   const getImages = (images) => {
     setFormObject((prev) => ({ ...prev, images }));
+  };
+
+  const getCover = (cover) => {
+    setFormObject((prev) => ({ ...prev, cover }));
   };
 
   useEffect(() => {
@@ -121,7 +147,7 @@ const ProjectForm = () => {
   }
 
   return (
-    <main className="p-10">
+    <main className="p-10 w-full">
       <Card>
         <form onSubmit={handleSubmit}>
           {/* FORM HEADER */}
@@ -260,7 +286,7 @@ const ProjectForm = () => {
               </div>
 
               {/* Content */}
-              <div className="flex flex-col gap-5 mt-5 w-full md:col-span-2 overflow-hidden">
+              <div className="flex flex-col gap-5 mt-5 w-full h-60 md:col-span-2 overflow-hidden">
                 <p className="text-[14.22px]">Content</p>
                 <TextEditor
                   data={formObject.content}
@@ -274,7 +300,9 @@ const ProjectForm = () => {
                   label="Upload Image"
                   data={formObject.images}
                   setData={getImages}
-                  multiple={false}
+                  multiple={true}
+                  cover={formObject.cover}
+                  setCover={getCover}
                 />
               </div>
 

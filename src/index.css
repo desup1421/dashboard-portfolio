@@ -5,3 +5,7 @@
   --color-primary: #DB4444;
   --color-surface-border: #D8DCDE;
 }
+
+ol, ul {
+  margin-left: 20px;
+}

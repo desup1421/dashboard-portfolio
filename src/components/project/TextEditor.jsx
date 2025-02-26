@@ -17,7 +17,7 @@ import {
 
 import "ckeditor5/ckeditor5.css";
 
-const TextEditor = ( {data, onChange } ) => {
+const TextEditor = ({ data, onChange }) => {
   const [editorData, setEditorData] = useState("");
 
   const handleEditorChange = (event, editor) => {
@@ -33,9 +33,13 @@ const TextEditor = ( {data, onChange } ) => {
   }, [data]);
   return (
     <CKEditor
+      className="h-full"
       editor={ClassicEditor}
       data={editorData}
       onChange={handleEditorChange}
+      onReady={(editor) => {
+        editor.ui.view.editable.element.classList.add("h-60");
+      }}
       config={{
         licenseKey: import.meta.env.VITE_CKEDITOR_KEY,
         plugins: [
