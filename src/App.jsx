@@ -1,7 +1,15 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import ProtectedLayout from "./layouts/ProtectedLayout";
-import { ContactPage, HomePage, ProjectPage, RegisterPage, SkillPage} from "@pages";
+import {
+  ContactPage,
+  HomePage,
+  ProjectPage,
+  RegisterPage,
+  SkillPage,
+  HeroPage,
+  HeroForm,
+} from "@pages";
 import { ProjectForm } from "./pages";
 import EducationPage from "./pages/education/EducationPage";
 import AddEducation from "./components/education/EducationForm";
@@ -49,17 +57,33 @@ const protectedRoutes = [
     element: <EducationFormPage />,
   },
   {
-    path : "skill",
-    element : <SkillPage />
+    path: "skill",
+    element: <SkillPage />,
   },
   {
-    path : "skill/add",
-    element : <SkillFormPage />
+    path: "skill/add",
+    element: <SkillFormPage />,
   },
   {
-    path : "skill/edit/id",
-    element : <SkillFormPage />
-  }
+    path: "skill/edit/id",
+    element: <SkillFormPage />,
+  },
+  {
+    path: "hero",
+    element: <HeroPage />,
+  },
+  {
+    path: "hero/add",
+    element: <HeroForm />,
+  },
+  {
+    path: "hero/edit/:id",
+    element: <HeroForm />,
+  },
+  {
+    path: "hero/detail/:id",
+    element: <HeroForm />,
+  },
 ];
 
 const App = () => {
