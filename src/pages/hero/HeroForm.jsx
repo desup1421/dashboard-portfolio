@@ -1,35 +1,80 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
-import { Card, Dropzone } from "@components";
+import { Link, useLocation, useParams, useNavigate } from "react-router-dom";
+import { Card, Dropzone, ModalLoading, ModalSuccess } from "@components";
 import { ArrowLeft, ArrowRightSmall } from "@icons";
 
 // SWEETALERT
-// import Swal from "sweetalert2";
-// import withReactContent from "sweetalert2-react-content";
-// const MySwal = withReactContent(Swal);
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+const MySwal = withReactContent(Swal);
 
 import {
   useGetHeroQuery,
-//   useCreateHeroMutation,
-//   useUpdateHeroMutation,
+  //   useCreateHeroMutation,
+  useUpdateHeroMutation,
 } from "../../store/slices/heroSlice";
 
 const HeroForm = () => {
-//   const navigate = useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const { id } = useParams();
   const path = location.pathname.split("/");
   const page = id ? path[path.length - 2] : path.pop();
 
-  const { data, isFetching } = useGetHeroQuery();
+  const { data, isFetching } = useGetHeroQuery(id, { skip: !id });
+  const [updateHero] = useUpdateHeroMutation();
 
   const [formObject, setFormObject] = useState({
     image: "",
     text: "",
   });
 
-  const handleSubmit = () => {
-    setFormObject({ image: "", text: "" });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    for (const key in formObject) {
+      if (Array.isArray(formObject[key]) && key === "images") {
+        // Untuk properti yang berupa array, append setiap elemen secara terpisah
+        formObject[key].forEach((item) => {
+          if (item.file) {
+            formData.append(key, item.file);
+          } else {
+            formData.append(key, JSON.stringify(item));
+          }
+        });
+      } else {
+        formData.append(key, formObject[key]);
+      }
+    }
+    MySwal.fire({
+      html: <ModalLoading />,
+      allowOutsideClick: false,
+      showConfirmButton: false,
+      customClass: {
+        popup:
+          "rounded-3xl w-auto md:w-[720px] h-[200px] flex justify-center items-center",
+      },
+    });
+    if (id) {
+      await updateHero(formData);
+    } else {
+      await updateHero(formData);
+    }
+    MySwal.fire({
+      html: (
+        <ModalSuccess message="This hero was successfully unpublished" />
+      ),
+      customClass: {
+        popup: "rounded-3xl w-auto md:w-[720px]",
+      },
+      showConfirmButton: false,
+      timer: 1000,
+    });
+    navigate("/dashboard/hero");
+    // console.log(formObject);
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
   };
 
   useEffect(() => {
@@ -39,7 +84,7 @@ const HeroForm = () => {
   }, [data]);
 
   if (isFetching) {
-    return <p>Loading...</p>
+    return <p>Loading...</p>;
   }
 
   return (
@@ -97,7 +142,9 @@ const HeroForm = () => {
                   name="text"
                   placeholder="Enter about text"
                   value={formObject.text}
-                  onChange={() => {}}
+                  onChange={(e) =>
+                    setFormObject({ ...formObject, text: e.target.value })
+                  }
                   required
                 />
               </div>

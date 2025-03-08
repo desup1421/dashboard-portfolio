@@ -4,67 +4,16 @@ import { useNavigate } from "react-router-dom";
 import {
   Card,
   Table,
-  ModalConfirm,
-  ModalSuccess,
-  ModalLoading,
 } from "@components";
-import { ArrowRightSmall, Eyes, Pencil, Trash } from "@icons";
+import { ArrowRightSmall, Eyes, Pencil } from "@icons";
 
 import {
   useGetHeroQuery,
-  useDeleteHeroMutation,
 } from "../../store/slices/heroSlice";
-
-// SWEETALERT
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
-const MySwal = withReactContent(Swal);
 
 const HeroPage = () => {
   const navigate = useNavigate();
-  const { data, isFetching } = useGetHeroQuery();
-  const [deleteHero] = useDeleteHeroMutation();
-
-  // DELETE HANDLING
-  const handleDelete = async (id) => {
-    // Call modal loading and auto close confirm modal
-    MySwal.fire({
-      html: <ModalLoading />,
-      allowOutsideClick: false,
-      showConfirmButton: false,
-      customClass: {
-        popup:
-          "rounded-3xl w-auto md:w-[720px] h-[200px] flex justify-center items-center",
-      },
-    });
-    // Make a request and wait response
-    await deleteHero(id);
-    // Call modal success after receive response and auto close loading modal
-    MySwal.fire({
-      html: <ModalSuccess message="This hero was successfully deleted" />,
-      customClass: {
-        popup: "rounded-3xl w-auto md:w-[720px]",
-      },
-      showConfirmButton: false,
-      timer: 1000,
-    });
-  };
-  const handleToggleDeleteModal = (data) => {
-    MySwal.fire({
-      html: (
-        <ModalConfirm
-          action={() => handleDelete(data.id)}
-          desc="Are you sure want to delete this hero?"
-          publish={false}
-          title="Delete Hero?"
-        />
-      ),
-      customClass: {
-        popup: "rounded-3xl py-10",
-      },
-      showConfirmButton: false,
-    });
-  };
+  const { data, isFetching } = useGetHeroQuery();  
 
   // TABLE PROPS
   const actions = [
@@ -75,10 +24,6 @@ const HeroPage = () => {
     {
       icon: Pencil,
       action: (data) => navigate(`/dashboard/hero/edit/${data._id}`),
-    },
-    {
-      icon: Trash,
-      action: (data) => handleToggleDeleteModal(data),
     },
   ];
   const dataKey = ["image", "text"];

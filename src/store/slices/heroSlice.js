@@ -23,15 +23,15 @@ export const heroApi = createApi({
     }),
     updateHero: builder.mutation({
       query: (data) => ({
-        url: `hero/${data.get("_id")}`,
+        url: `hero`,
         method: "PUT",
         body: data,
       }),
       invalidatesTags: ["Hero"],
     }),
     deleteHero: builder.mutation({
-      query: (id) => ({
-        url: `hero/${id}`,
+      query: () => ({
+        url: `hero`,
         method: "DELETE",
       }),
       invalidatesTags: ["Hero"],
