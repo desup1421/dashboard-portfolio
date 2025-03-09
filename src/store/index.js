@@ -9,6 +9,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { projectApi } from "./slices/projectSlice";
 import { educationApi } from "./slices/educationSlice";
 import { skillApi } from "./slices/skillSlice";
+import { heroApi } from "./slices/heroSlice";
 
 const encryptor = encryptTransform({
   secretKey: import.meta.env.VITE_ENCRYPT_KEY,
@@ -19,8 +20,9 @@ const encryptor = encryptTransform({
 
 const rootReducer = combineReducers({
   [projectApi.reducerPath]: projectApi.reducer,
-  [educationApi.reducerPath] : educationApi.reducer,
-  [skillApi.reducerPath] : skillApi.reducer
+  [educationApi.reducerPath]: educationApi.reducer,
+  [skillApi.reducerPath]: skillApi.reducer,
+  [heroApi.reducerPath]: heroApi.reducer,
 });
 
 const persistConfig = {
@@ -36,7 +38,12 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(projectApi.middleware, educationApi.middleware, skillApi.middleware),
+    }).concat(
+      projectApi.middleware,
+      educationApi.middleware,
+      skillApi.middleware,
+      heroApi.middleware
+    ),
 });
 
 const persistor = persistStore(store);

@@ -7,9 +7,12 @@ const Dropzone = ({
   data = [],
   setData = () => {},
   multiple = true,
+  cover = "",
+  setCover = () => {},
+  hideDropzone = false,
 }) => {
   const [images, setImages] = useState(data);
-  const [defaultImage, setDefaultImage] = useState(null);
+  const [defaultImage, setDefaultImage] = useState(cover);
   const [isDragging, setIsDragging] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState(null);
   const fileInputRef = useRef(null);
@@ -44,11 +47,18 @@ const Dropzone = ({
   const handleFiles = (files) => {
     const newImages = files.map((file) => ({
       file,
-      preview: URL.createObjectURL(file),
+      url: URL.createObjectURL(file),
     }));
-    setImages((prev) => [...prev, ...newImages]);
+
+    if (multiple) {
+      setImages((prev) => [...prev, ...newImages]);
+    } else {
+      setImages([...newImages]);
+    }
+    // setImages((prev) => [...prev, ...newImages]);
     if (!defaultImage && newImages.length > 0) {
       setDefaultImage(newImages[0]);
+      setCover(0);
     }
     // Add the new images to the data
   };
@@ -82,6 +92,7 @@ const Dropzone = ({
       // Update default image reference if it was moved
       if (defaultImage === images[draggedIndex]) {
         setDefaultImage(draggedImage);
+        setCover(draggedIndex);
       }
     }
   };
@@ -90,26 +101,29 @@ const Dropzone = ({
     const newImages = [...images];
     if (defaultImage === images[index]) {
       setDefaultImage(images[0] === images[index] ? images[1] : images[0]);
+      setCover(0);
     }
-    URL.revokeObjectURL(images[index].preview);
+    URL.revokeObjectURL(images[index].url);
     newImages.splice(index, 1);
     setImages(newImages);
   };
 
   const setAsDefault = (index) => {
     setDefaultImage(images[index]);
+    setCover(index);
   };
 
   useEffect(() => {
-    const data = images.map((image) =>
-      image instanceof Object ? image.file : image
-    );
-    setData(data);
+    // const data = images.map((image) =>
+    //   image instanceof Object ? image.file : image
+    // );
+    setData(images);
+
   }, [images]);
 
   return (
     <>
-      <div className=" border border-surface-border bg-surface-background py-3 px-4 rounded-lg space-y-3 flex flex-col">
+      <div className={`border border-surface-border bg-surface-background py-3 px-4 rounded-lg space-y-3 flex flex-col ${hideDropzone && "hidden"}`}>
         <label className="text-sm self-start" htmlFor="image">
           {label}
         </label>
@@ -153,7 +167,7 @@ const Dropzone = ({
             onDragOver={(e) => handleImageDragOver(e, index)}
           >
             <img
-              src={image instanceof Object ? image.preview : image}
+              src={image instanceof Object ? image.url : image}
               alt={`Preview ${index}`}
               className="w-full aspect-square object-cover rounded-lg"
             />

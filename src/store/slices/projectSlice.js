@@ -6,15 +6,20 @@ export const projectApi = createApi({
   reducerPath: "projectApi",
   baseQuery: fetchBaseQuery({
     baseUrl,
+    prepareHeaders: (headers) => {
+      headers.set("x-api-key", "dede-supriatna");
+      return headers;
+    }
   }),
   endpoints: (builder) => ({
     getProjects: builder.query({
       query: ({ limit, page }) => `project?limit=${limit}&page=${page}`,
       providesTags: ["Projects"],
+      keepUnusedDataFor: 300,
     }),
     getProjectDetail: builder.query({
       query: (id) => `project/${id}`,
-      providesTags: ["Projects"],
+      providesTags: (result, error, id) => [{ type: "Project", id }],
     }),
     createProject: builder.mutation({
       query: (data) => ({
@@ -26,11 +31,14 @@ export const projectApi = createApi({
     }),
     updateProject: builder.mutation({
       query: (data) => ({
-        url: `project/${data.id}`,
+        url: `project/${data.get("_id")}`,
         method: "PUT",
         body: data,
       }),
-      invalidatesTags: ["Projects"],
+      invalidatesTags: (result, error, data) => [
+        "Projects",
+        { type: "Project", id: data.get("_id") },
+      ],
     }),
     deleteProject: builder.mutation({
       query: (id) => ({

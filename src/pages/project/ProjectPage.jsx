@@ -162,7 +162,7 @@ const ProjectPage = () => {
   }, [projects, currentPage, totalPages]);
 
   return (
-    <main className="bg-surface-background p-10">
+    <main className="bg-surface-background p-10 w-full">
       <Card className="w-full px-5 pt-12 overflow-hidden">
         {/* HEADER */}
         <div className="flex justify-between mb-10 items-baseline">
