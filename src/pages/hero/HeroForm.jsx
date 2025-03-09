@@ -10,7 +10,7 @@ const MySwal = withReactContent(Swal);
 
 import {
   useGetHeroQuery,
-  //   useCreateHeroMutation,
+    useCreateHeroMutation,
   useUpdateHeroMutation,
 } from "../../store/slices/heroSlice";
 
@@ -22,6 +22,7 @@ const HeroForm = () => {
   const page = id ? path[path.length - 2] : path.pop();
 
   const { data, isFetching } = useGetHeroQuery(id, { skip: !id });
+  const [createHero] = useCreateHeroMutation();
   const [updateHero] = useUpdateHeroMutation();
 
   const [formObject, setFormObject] = useState({
@@ -62,7 +63,7 @@ const HeroForm = () => {
     if (id) {
       await updateHero(formData);
     } else {
-      await updateHero(formData);
+      await createHero(formData);
     }
     MySwal.fire({
       html: <ModalSuccess message="This hero was successfully unpublished" />,

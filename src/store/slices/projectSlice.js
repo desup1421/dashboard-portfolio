@@ -6,6 +6,10 @@ export const projectApi = createApi({
   reducerPath: "projectApi",
   baseQuery: fetchBaseQuery({
     baseUrl,
+    prepareHeaders: (headers) => {
+      headers.set("x-api-key", "dede-supriatna");
+      return headers;
+    }
   }),
   endpoints: (builder) => ({
     getProjects: builder.query({

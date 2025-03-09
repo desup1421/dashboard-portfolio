@@ -6,6 +6,10 @@ export const heroApi = createApi({
   reducerPath: "heroApi",
   baseQuery: fetchBaseQuery({
     baseUrl,
+    prepareHeaders: (headers) => {
+      headers.set("x-api-key", "dede-supriatna");
+      return headers;
+    }
   }),
   endpoints: (builder) => ({
     getHero: builder.query({
@@ -23,7 +27,7 @@ export const heroApi = createApi({
     }),
     updateHero: builder.mutation({
       query: (data) => ({
-        url: `hero`,
+        url: `hero/${data.get("_id")}`,
         method: "PUT",
         body: data,
       }),
