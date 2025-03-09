@@ -9,6 +9,7 @@ const Dropzone = ({
   multiple = true,
   cover = "",
   setCover = () => {},
+  hideDropzone = false,
 }) => {
   const [images, setImages] = useState(data);
   const [defaultImage, setDefaultImage] = useState(cover);
@@ -122,7 +123,7 @@ const Dropzone = ({
 
   return (
     <>
-      <div className=" border border-surface-border bg-surface-background py-3 px-4 rounded-lg space-y-3 flex flex-col">
+      <div className={`border border-surface-border bg-surface-background py-3 px-4 rounded-lg space-y-3 flex flex-col ${hideDropzone && "hidden"}`}>
         <label className="text-sm self-start" htmlFor="image">
           {label}
         </label>

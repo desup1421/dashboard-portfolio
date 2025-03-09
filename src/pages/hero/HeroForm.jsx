@@ -29,11 +29,15 @@ const HeroForm = () => {
     text: "",
   });
 
+  const getImage = (image) => {
+    setFormObject((prev) => ({ ...prev, image }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     for (const key in formObject) {
-      if (Array.isArray(formObject[key]) && key === "images") {
+      if (Array.isArray(formObject[key]) && key === "image") {
         // Untuk properti yang berupa array, append setiap elemen secara terpisah
         formObject[key].forEach((item) => {
           if (item.file) {
@@ -61,9 +65,7 @@ const HeroForm = () => {
       await updateHero(formData);
     }
     MySwal.fire({
-      html: (
-        <ModalSuccess message="This hero was successfully unpublished" />
-      ),
+      html: <ModalSuccess message="This hero was successfully unpublished" />,
       customClass: {
         popup: "rounded-3xl w-auto md:w-[720px]",
       },
@@ -151,7 +153,13 @@ const HeroForm = () => {
 
               {/* Upload */}
               <div className="flex flex-col gap-5 mt-5 w-full md:col-span-2">
-                <Dropzone label="Upload Image" multiple={false} />
+                <Dropzone
+                  label="Upload Image"
+                  multiple={false}
+                  hideDropzone={page === "detail"}
+                  setData={getImage}
+                  data={formObject.image ? [formObject.image] : []}
+                />
               </div>
             </div>
           </div>
